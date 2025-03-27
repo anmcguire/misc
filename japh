@@ -1,0 +1,3 @@
+perl -e '$a=[[qw[J u s t]],[qw[A n o t h e r]],[qw[P e r l]], [qw[H a c k e r]]]
+;$.++;$@=$#$a;$$=[reverse sort map$#$_=>@$a]->[$|];for $](--$...$$){for$}($|..$@
+) {$$[$]][$}]=$a->[$}][$]]}}$,=$";$\=$/;print map defined()?$_:$,,@$_ for @$;'
