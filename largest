@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+import math
+import zlib
+import os.path
+import argparse
+
+def main(args):
+    sizes = []
+    base = args.directory
+
+    for root, dirs, files in os.walk(base, topdown=True):
+        if args.xdev and os.lstat(root).st_dev != os.lstat(base).st_dev:
+                continue
+        else:
+            for branch in sorted(dirs + files):
+                path = os.path.join(root, branch)
+                path = os.path.expanduser(path)
+                if os.path.exists(path):
+                    size = os.lstat(path).st_size
+                    sizes.append((size, path))
+    
+    sizes.sort(key = lambda tuple: tuple[0])
+
+    n = -1 * args.number
+    for tuple in reversed(sizes[n::]):
+        size = humanize(tuple[0]) if args.humanize else tuple[0]
+        path = tuple[1]
+        if args.crc32:
+            print("{:>16}\t{}\t{}".format(size, crc32(path), path))
+        else:
+            print("{:>16}\t{}".format(size, path))
+
+def natural(n):
+    n = int(n)
+    if n < 1:
+        raise argparse.ArgumentTypeError('%d is not a positive integer' % n)
+    return n
+
+def humanize(n):
+    names = [   'B', 'KiB', 'MiB', 'GiB',
+              'TiB', 'PiB', 'EiB', 'ZiB',
+              'YiB', 'RiB', 'QiB' ]
+
+    x = int(math.log(n, 1024))
+    return(str(round(n / 1024 ** x, 2)) + names[x] if x > 0 else n)
+
+def get_options():
+    parser = argparse.ArgumentParser(description='Display largest files underneath directory.')
+    parser.add_argument('directory', help='top-level directory to traverse')
+    parser.add_argument('-c', '--crc32', action='store_true', help='compute crc32 for results; this may be slow')
+    parser.add_argument('-x', '--xdev', action='store_true', help='do not cross device boundaries')
+    parser.add_argument('-n', '--number', type=natural, default=10, help='number of files to display (default = 10)')
+    parser.add_argument('-H', '--humanize', action='store_true', help='print file sizes in human-readable format')
+    return(parser.parse_args())
+    
+def crc32(file, size=65536):
+    with open(file, 'rb') as fh:
+        hash = 0
+        while True:
+            data = fh.read(size)
+            if not data:
+                break
+            hash = zlib.crc32(data, hash)
+        return "%08x" % hash
+
+if __name__ == '__main__':
+    main(get_options())
+
