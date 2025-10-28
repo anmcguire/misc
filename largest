@@ -27,9 +27,9 @@ def main(args):
         size = readable(t[0]) if args.readable else t[0]
         path = t[1]
         if args.crc32:
-            print(f"{size:>16}\t{crc32(path)}\t{path}")
+            print(f'{size:>16}\t{crc32(path)}\t{path}')
         else:
-            print(f"{size:>16}\t{path}")
+            print(f'{size:>16}\t{path}')
 
 
 def positive(n: str) -> int:
