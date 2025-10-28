@@ -50,7 +50,7 @@ def readable(n: int) -> str:
     return str(round(n / 1024 ** x, 2)) + suffixes[x] if x > 0 else str(n)
 
 
-def get_options() -> argparse.Namespace:
+def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
              description='Display largest files beneath directory')
     parser.add_argument('directory', help='top-level directory to traverse')
@@ -77,4 +77,4 @@ def crc32(file: str, size: int = 65536) -> str:
 
 
 if __name__ == '__main__':
-    main(get_options())
+    main(parse_arguments())
