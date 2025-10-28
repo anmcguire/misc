@@ -1,0 +1,91 @@
+#!/usr/bin/python3
+
+"""
+Gather LDAP attributes about a user from various sources and synthesize
+them into something that might be useful.
+"""
+
+from pprint import pprint
+
+import argparse
+import ldap
+
+
+connections = [
+    {
+        'url': 'ldaps://ldap.cs.uchicago.edu',
+        'attrs': [  # Setting "'attrs': None" gets all attributes.
+             'CSAccount',
+             'gecos',
+             'gidNumber',
+             'homeDirectory',
+             'loginShell',
+             'uidNumber',
+        ]
+    },
+    {
+        'url': 'ldaps://ldap.uchicago.edu',
+        'attrs': [
+            'chicagoID',
+            'eduPersonAffiliation',
+            'eduPersonPrimaryAffiliation',
+            'mail',
+            'uid',
+        ]
+    }
+]
+
+
+def main(args: argparse.Namespace) -> None:
+    """
+    Set up the required LDAP connections, query the desired
+    attributes for a given uid, and print the results to stdout.
+    """
+    attributes = {}
+    for config in connections:
+        conn = ldap.initialize(config['url'])
+        conn.protocol_version = ldap.VERSION3
+
+        # base_dn = "ou=people,dc=cs,dc=uchicago,dc=edu"
+        base_dn = "dc=uchicago,dc=edu"
+
+        #
+        # The following searches the object and all its descendants.
+        # Use SCOPE_ONELEVEL to not do this.
+        #
+        search_scope = ldap.SCOPE_SUBTREE
+
+        search_filter = f'uid={args.account}'
+
+        try:
+            results = conn.search_s(base_dn, search_scope,
+                                    search_filter, config['attrs'])
+            if results:
+                attributes.update(results[0][1])
+
+        except ldap.LDAPError as e:
+            print(e)
+
+    #
+    # Generally, results from searches are encoded as byte literals.
+    # The following converts them to utf-8.
+    #
+    account = {}
+    for k, v in attributes.items():
+        account[k] = v[0].decode()
+
+    pprint(account)
+
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command line arguments. This task can grow large, so we
+    take it out of the main() function.
+    """
+    parser = argparse.ArgumentParser(description='Display data for an account')
+    parser.add_argument('account', help='name of account to query')
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    main(parse_arguments())
