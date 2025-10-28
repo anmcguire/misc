@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-
+"""
+Identify files that are disk hogs beneath some directory,
+and print a report on them. Optionally, compute a CRC32 on
+those files to assist in spotting duplicates.
+"""
 import math
 import zlib
 import os.path
@@ -7,6 +11,10 @@ import argparse
 
 
 def main(args: argparse.Namespace) -> None:
+    """
+    Walk the specified directory, collect values for file sizes, then
+    report on those that are largest up to some specified number.
+    """
     sizes = []
     base = args.directory
 
@@ -33,6 +41,9 @@ def main(args: argparse.Namespace) -> None:
 
 
 def positive(n: str) -> int:
+    """
+    Ensure that whatever value we're passed is a positive integer.
+    """
     n = int(n)
     if n < 1:
         raise argparse.ArgumentTypeError(f'{n} is not a positive integer')
@@ -40,6 +51,11 @@ def positive(n: str) -> int:
 
 
 def readable(n: int) -> str:
+    """
+    High byte-counts are hard to parse visually, so we make things easier 
+    with IEC 60027-2 A.2 suffixes, as with the 'df -h' command. This is
+    overkill for sure.
+    """
     suffixes = [
         'B',   'KiB', 'MiB', 'GiB',
         'TiB', 'PiB', 'EiB', 'ZiB',
@@ -51,6 +67,10 @@ def readable(n: int) -> str:
 
 
 def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command line arguments. This task can grow large, so we
+    take it out of the main() function.
+    """
     parser = argparse.ArgumentParser(
              description='Display largest files beneath directory')
     parser.add_argument('directory', help='top-level directory to traverse')
@@ -66,6 +86,10 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def crc32(file: str, size: int = 65536) -> str:
+    """
+    Compute the CRC32 value for a file. This exists to make it easier to 
+    spot duplicates in output, if desired.
+    """
     with open(file, 'rb') as fh:
         crc = 0
         while True:
