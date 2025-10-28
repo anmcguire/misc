@@ -24,7 +24,7 @@ def main(args):
 
     n = -1 * args.number
     for t in reversed(sizes[n::]):
-        size = readable(tuple[0]) if args.readable else t[0]
+        size = readable(t[0]) if args.readable else t[0]
         path = t[1]
         if args.crc32:
             print(f"{size:>16}\t{crc32(path)}\t{path}")
