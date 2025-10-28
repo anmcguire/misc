@@ -22,8 +22,8 @@ def main(args: argparse.Namespace) -> None:
 
     sizes.sort(key=lambda t: t[0])
 
-    n = -1 * args.number
-    for t in reversed(sizes[n::]):
+    k = -1 * args.number
+    for t in reversed(sizes[k::]):
         size = readable(t[0]) if args.readable else t[0]
         path = t[1]
         if args.crc32:
@@ -41,7 +41,7 @@ def positive(n: str) -> int:
 
 def readable(n: int) -> str:
     suffixes = [
-        'B', 'KiB', 'MiB', 'GiB',
+        'B',   'KiB', 'MiB', 'GiB',
         'TiB', 'PiB', 'EiB', 'ZiB',
         'YiB', 'RiB', 'QiB'
     ]
