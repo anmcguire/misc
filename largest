@@ -6,7 +6,7 @@ import os.path
 import argparse
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
     sizes = []
     base = args.directory
 
@@ -50,7 +50,7 @@ def readable(n: int) -> str:
     return str(round(n / 1024 ** x, 2)) + suffixes[x] if x > 0 else str(n)
 
 
-def get_options():
+def get_options() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
              description='Display largest files beneath directory')
     parser.add_argument('directory', help='top-level directory to traverse')
@@ -65,7 +65,7 @@ def get_options():
     return parser.parse_args()
 
 
-def crc32(file, size=65536):
+def crc32(file: str, size: int = 65536) -> str:
     with open(file, 'rb') as fh:
         crc = 0
         while True:
