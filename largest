@@ -13,30 +13,29 @@ def main(args):
     for root, dirs, files in os.walk(base, topdown=True):
         if args.xdev and os.lstat(root).st_dev != os.lstat(base).st_dev:
             continue
-        else:
-            for branch in sorted(dirs + files):
-                path = os.path.join(root, branch)
-                path = os.path.expanduser(path)
-                if os.path.exists(path):
-                    size = os.lstat(path).st_size
-                    sizes.append((size, path))
+        for branch in sorted(dirs + files):
+            path = os.path.join(root, branch)
+            path = os.path.expanduser(path)
+            if os.path.exists(path):
+                size = os.lstat(path).st_size
+                sizes.append((size, path))
 
-    sizes.sort(key=lambda tuple: tuple[0])
+    sizes.sort(key=lambda t: t[0])
 
     n = -1 * args.number
-    for tuple in reversed(sizes[n::]):
-        size = readable(tuple[0]) if args.readable else tuple[0]
-        path = tuple[1]
+    for t in reversed(sizes[n::]):
+        size = readable(tuple[0]) if args.readable else t[0]
+        path = t[1]
         if args.crc32:
-            print("{:>16}\t{}\t{}".format(size, crc32(path), path))
+            print(f"{size:>16}\t{crc32(path)}\t{path}")
         else:
-            print("{:>16}\t{}".format(size, path))
+            print(f"{size:>16}\t{path}")
 
 
 def natural(n):
     n = int(n)
     if n < 1:
-        raise argparse.ArgumentTypeError('%d is not a positive integer' % n)
+        raise argparse.ArgumentTypeError(f'{n} is not a positive integer')
     return n
 
 
@@ -68,13 +67,13 @@ def get_options():
 
 def crc32(file, size=65536):
     with open(file, 'rb') as fh:
-        hash = 0
+        crc = 0
         while True:
             data = fh.read(size)
             if not data:
                 break
-            hash = zlib.crc32(data, hash)
-        return "%08x" % hash
+            crc = zlib.crc32(data, crc)
+        return f"{crc:08x}"
 
 
 if __name__ == '__main__':
