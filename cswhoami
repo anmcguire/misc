@@ -5,11 +5,9 @@ Gather LDAP attributes about a user from various sources and synthesize
 them into something that might be useful.
 """
 
-
 import argparse
 import json
 import ldap
-
 
 connections = [
     {
