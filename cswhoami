@@ -5,9 +5,9 @@ Gather LDAP attributes about a user from various sources and synthesize
 them into something that might be useful.
 """
 
-from pprint import pprint
 
 import argparse
+import json
 import ldap
 
 
@@ -74,7 +74,7 @@ def main(args: argparse.Namespace) -> None:
     for k, v in attributes.items():
         account[k] = v[0].decode()
 
-    pprint(account)
+    print(json.dumps(account, sort_keys=True, indent=4))
 
 
 def parse_arguments() -> argparse.Namespace:
