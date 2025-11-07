@@ -5,9 +5,11 @@ Gather LDAP attributes about a user from various sources and synthesize
 them into something that might be useful.
 """
 
+
 import argparse
 import json
 import ldap
+
 
 connections = [
     {
@@ -28,6 +30,8 @@ connections = [
             'eduPersonAffiliation',
             'eduPersonPrimaryAffiliation',
             'mail',
+            'title',
+            'ucDepartment',
             'uid',
         ]
     }
@@ -70,7 +74,10 @@ def main(args: argparse.Namespace) -> None:
     #
     account = {}
     for k, v in attributes.items():
-        account[k] = v[0].decode()
+        if len(v) == 1:
+            account[k] = v[0].decode()
+        else:
+            account[k] = [a.decode() for a in v]
 
     print(json.dumps(account, sort_keys=True, indent=4))
 
