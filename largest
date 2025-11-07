@@ -4,11 +4,11 @@ Identify files that are disk hogs beneath some directory,
 and print a report on them. Optionally, compute a CRC32 on
 those files to assist in spotting duplicates.
 """
+
 import math
 import zlib
 import os.path
 import argparse
-
 
 def main(args: argparse.Namespace) -> None:
     """
