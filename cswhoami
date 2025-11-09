@@ -13,12 +13,12 @@ connections = [
     {
         'url': 'ldaps://ldap.cs.uchicago.edu',
         'attrs': [  # Setting "'attrs': None" gets all attributes.
-             'CSAccount',
-             'gecos',
-             'gidNumber',
-             'homeDirectory',
-             'loginShell',
-             'uidNumber',
+            'CSAccount',
+            'gecos',
+            'gidNumber',
+            'homeDirectory',
+            'loginShell',
+            'uidNumber',
         ]
     },
     {
