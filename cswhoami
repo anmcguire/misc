@@ -36,6 +36,16 @@ connections = [
 ]
 
 
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command line arguments. This task can grow large, so we
+    take it out of the main() function.
+    """
+    parser = argparse.ArgumentParser(description='Display data for an account')
+    parser.add_argument('account', help='name of account to query')
+    return parser.parse_args()
+
+
 def main(args: argparse.Namespace) -> None:
     """
     Set up the required LDAP connections, query the desired
@@ -78,16 +88,6 @@ def main(args: argparse.Namespace) -> None:
             account[k] = [a.decode() for a in v]
 
     print(json.dumps(account, sort_keys=True, indent=4))
-
-
-def parse_arguments() -> argparse.Namespace:
-    """
-    Parse command line arguments. This task can grow large, so we
-    take it out of the main() function.
-    """
-    parser = argparse.ArgumentParser(description='Display data for an account')
-    parser.add_argument('account', help='name of account to query')
-    return parser.parse_args()
 
 
 if __name__ == '__main__':
