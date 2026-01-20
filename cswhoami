@@ -53,8 +53,8 @@ def main(args: argparse.Namespace) -> None:
         conn = ldap.initialize(config['url'])
         conn.protocol_version = ldap.VERSION3
 
-        # base_dn = "ou=people,dc=cs,dc=uchicago,dc=edu"
-        base_dn = "dc=uchicago,dc=edu"
+        # base_dn = "ou=people,dc=cs,dc=example,dc=com"
+        base_dn = "dc=example,dc=com"
 
         #
         # The following searches the object and all its descendants.
