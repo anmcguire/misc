@@ -11,9 +11,9 @@ import ldap
 
 connections = [
     {
-        'url': 'ldaps://ldap.cs.uchicago.edu',
+        'url': 'ldaps://REDACTED',
         'attrs': [  # Setting "'attrs': None" gets all attributes.
-            'CSAccount',
+            'REDACTED',
             'gecos',
             'gidNumber',
             'homeDirectory',
@@ -22,14 +22,11 @@ connections = [
         ]
     },
     {
-        'url': 'ldaps://ldap.uchicago.edu',
+        'url': 'ldaps://REDACTED',
         'attrs': [
-            'chicagoID',
-            'eduPersonAffiliation',
-            'eduPersonPrimaryAffiliation',
+            'REDACTED',
             'mail',
             'title',
-            'ucDepartment',
             'uid',
         ]
     }
