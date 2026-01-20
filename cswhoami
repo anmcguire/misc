@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """
 Gather LDAP attributes about a user from various sources and synthesize
