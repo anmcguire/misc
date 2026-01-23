@@ -1,0 +1,4 @@
+perl -e '$a=[[qw[J A P H]],[qw[u n e a]],[qw[s o r c]],[qw[t t l k]],
+[qw[. h . e]],[qw[. e . r]], [qw[. r . .]]];$.++;$@=$#$a;$$=[reverse 
+sort map$#$_=>@$a]->[$|];for $](--$...$$){for$}($|..$@) {$$[$]][$}]=
+ $a -> [$}][$]]}}$,=$";$\=$/;print map defined()?$_:$,,@$_ for @$;'
